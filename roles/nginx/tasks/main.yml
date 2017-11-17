@@ -22,7 +22,7 @@
 
 - name: Clone Nginx configs
   git:
-    repo: https://github.com/A5hleyRich/wordpress-nginx.git
+    repo:  https://github.com/A5hleyRich/wordpress-nginx.git
     dest: /etc/nginx
     version: master
     force: yes
