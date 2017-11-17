@@ -2,8 +2,8 @@
    - name: Install MySQL
      apt: package={{ item }} state=installed  update_cache=yes
      with_items:
-      - mysql-server-5.5
-      - mysql-client-5.5
+      - mysql-server
+      - mysql-client
    - name: Install Python MySQLdb
      apt: name=python-mysqldb state=latest
 
@@ -15,4 +15,4 @@
       name=wp
       password=@Creatio
       priv=nik.*:ALL
-      host=127.0.0.1
+      host=localhost
