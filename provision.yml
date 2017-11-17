@@ -10,3 +10,26 @@
    - php
    - mariadb
    - wp-cli
+- hosts: staging
+  become: yes
+  user: nkhlpathak
+  vars:
+    username: nkhlpathak
+  roles:
+   - common
+   - nginx
+   - php
+   - mariadb
+   - wp-cli
+- hosts: nginx
+  become: yes
+  user: nkhlpathak
+  vars:
+    username: nkhlpathak
+  roles:
+   - common
+   - nginx
+   - php
+   - mariadb
+   - wp-cli
+
