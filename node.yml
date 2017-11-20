@@ -1,0 +1,10 @@
+---
+ - hosts: production
+   user: nkhlpathak 
+   become: yes 
+   become_method: sudo
+   tasks:
+   - name: Transfer the script 
+     copy: src=/home/nkhlpathak/nodejs/node.sh dest=/home/nkhlpathak mode=0777 owner=nkhlpathak group=nkhlpathak
+   - name: Execute the script 
+     command: sh /home/nkhlpathak/node.sh
