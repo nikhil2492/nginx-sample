@@ -6,7 +6,8 @@
 
   vars:
     machine_type: n1-standard-1 # default
-    zone:  asia-east1-a 
+    zone:  asia-east1-a
+#    state: absent
     image: ubuntu-1404-trusty-v20171115a
     service_account_email: nik-68@coherent-bay-160809.iam.gserviceaccount.com 
     credentials_file: /home/nkhlpathak/git/ansible/nik.json
@@ -16,15 +17,18 @@
   tasks:
     - name: Launch instances
       gce:
-          instance_names: connector 
+          instance_names: ssh,ssh1,ssh2 
           machine_type: "{{ machine_type }}"
           zone: "{{ zone }}"
+ #         state: "{{ state }}"
           image: "{{ image }}"
           service_account_email: "{{ service_account_email }}"
           credentials_file: "{{ credentials_file }}"
           project_id: "{{ project_id }}"
           network: "{{ network }}"
           subnetwork: "{{ subnetwork }}"
+          persistent_boot_disk: true 
+          disk_size: 30
           tags: public
       register: gce
 

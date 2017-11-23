@@ -1,0 +1,6 @@
+- hosts: production
+  tasks:
+    - name: Generate SSH keys
+      shell: ssh-keygen -b 2048 -t rsa -f /home/nkhlpathak/.ssh/id_rsa -q -N ""
+      args:
+      creates: /home/nkhlpathak/.ssh/id_rsa
