@@ -4,3 +4,8 @@
       shell: ssh-keygen -b 2048 -t rsa -f /home/nkhlpathak/.ssh/id_rsa -q -N ""
       args:
       creates: /home/nkhlpathak/.ssh/id_rsa
+    - name: Set authorized key took from file
+      authorized_key:
+        user: nkhlpathak 
+        state: present
+        key: "{{ lookup('file', '/home/nkhlpathak/.ssh/id_rsa.pub') }}"
