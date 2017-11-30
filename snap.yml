@@ -1,0 +1,52 @@
+---
+- name: Create gce snapshot
+  hosts: localhost
+  tasks:
+   - name: Creaing Snap
+     gce_snapshot:
+      instance_name: web-on-buckets
+      snapshot_name: web-snapshot12
+      state: present
+      service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
+      credentials_file: /home/nkhlpathak/git/ansible/nik.json
+      project_id: coherent-bay-160809
+   - name: Create disk from snapshot
+     gce_pd:
+          disk_type: pd-standard
+          snapshot: web-snapshot12
+          name: web-new
+          state: present
+          zone:  asia-east1-a
+          size_gb: 30 
+          service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
+          credentials_file: /home/nkhlpathak/git/ansible/nik.json
+          project_id: coherent-bay-160809
+   - gce_img:
+      name: nginx
+      source: web-new
+      zone: asia-east1-a
+      state: present
+      service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
+      pem_file: /home/nkhlpathak/git/ansible/nik.json
+      project_id: coherent-bay-160809
+   - name: Create Temp
+     gce_instance_template:
+      name: nginx-temp
+      size: n1-standard-1
+      state: present
+      service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
+      credentials_file: /home/nkhlpathak/git/ansible/nik.json
+      project_id: coherent-bay-160809
+      subnetwork_region: asia-east1
+      network: nikhil
+      subnetwork: public
+      tags: public
+      disks_gce_struct:
+        - device_name: /dev/sda
+          boot: true
+          autoDelete: true
+          initializeParams:
+             diskSizeGb: 30
+             diskType: pd-ssd
+             sourceImage:  projects/coherent-bay-160809/global/images/nginx
+

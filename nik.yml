@@ -17,7 +17,7 @@
   tasks:
     - name: Launch instances
       gce:
-          instance_names: jenkins 
+          instance_names: web-on-bucketijvs 
           machine_type: "{{ machine_type }}"
           zone: "{{ zone }}"
  #         state: "{{ state }}"
