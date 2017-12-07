@@ -5,7 +5,7 @@
    - name: Creaing Snap
      gce_snapshot:
       instance_name: web-on-buckets
-      snapshot_name: web-snapshot12
+      snapshot_name: changes
       state: present
       service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
       credentials_file: /home/nkhlpathak/git/ansible/nik.json
@@ -13,8 +13,8 @@
    - name: Create disk from snapshot
      gce_pd:
           disk_type: pd-standard
-          snapshot: web-snapshot12
-          name: web-new
+          snapshot: changes
+          name: changes-disk
           state: present
           zone:  asia-east1-a
           size_gb: 30 
@@ -22,8 +22,8 @@
           credentials_file: /home/nkhlpathak/git/ansible/nik.json
           project_id: coherent-bay-160809
    - gce_img:
-      name: nginx
-      source: web-new
+      name: changes-img
+      source: changes-disk
       zone: asia-east1-a
       state: present
       service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
@@ -31,9 +31,9 @@
       project_id: coherent-bay-160809
    - name: Create Temp
      gce_instance_template:
-      name: nginx-temp
+      name: changes-temp
       size: n1-standard-1
-      state: present
+      state: present 
       service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
       credentials_file: /home/nkhlpathak/git/ansible/nik.json
       project_id: coherent-bay-160809
@@ -48,5 +48,26 @@
           initializeParams:
              diskSizeGb: 30
              diskType: pd-ssd
-             sourceImage:  projects/coherent-bay-160809/global/images/nginx
-
+             sourceImage:  projects/coherent-bay-160809/global/images/changes-img
+   - name: Update MIG with Autoscaler
+     gce_mig:
+      name: changes-auto
+      zone: asia-east1-a
+      state: present 
+      service_account_email: sql-buckets@coherent-bay-160809.iam.gserviceaccount.com
+      credentials_file: /home/nkhlpathak/git/ansible/nik.json
+      project_id: coherent-bay-160809
+      size: 2
+      template: changes-temp
+      recreate_instances: yes
+      autoscaling:
+        enabled: yes
+        name: my-changes
+        policy:
+          min_instances: 2
+          max_instances: 5
+          cool_down_period: 37
+          cpu_utilization:
+            target: .39
+          load_balancing_utilization:
+            target: 0.4

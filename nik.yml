@@ -13,11 +13,11 @@
     credentials_file: /home/nkhlpathak/git/ansible/nik.json
     project_id: coherent-bay-160809
     network: nikhil
-    subnetwork: private
+    subnetwork: public 
   tasks:
     - name: Launch instances
       gce:
-          instance_names: web-on-bucketijvs 
+          instance_names: zabbix 
           machine_type: "{{ machine_type }}"
           zone: "{{ zone }}"
  #         state: "{{ state }}"
