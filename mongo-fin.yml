@@ -1,0 +1,16 @@
+---
+- name: Create gce snapshot
+  hosts: localhost
+  vars :
+     date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}" 
+  tasks:
+   - name: Creaing Snap
+     gce_snapshot:
+      instance_name: mongo-finance  
+      snapshot_name: "{{ date }}"
+      state: present
+      disks:
+        - finance-disk
+      service_account_email: use-ansible@robotic-pact-170607.iam.gserviceaccount.com
+      credentials_file: /home/dev_ops/git/ansible/nik.json
+      project_id: robotic-pact-170607 
